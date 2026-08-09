@@ -1,31 +1,57 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Loadsmart CORS PoC</title>
+</head>
 <body>
-<button onclick="test()">Test Deere CORS</button>
+    <h2>Loadsmart CORS Test</h2>
 
-<pre id="out"></pre>
+    <input
+        id="token"
+        type="password"
+        placeholder="Paste your sandbox Bearer token"
+        style="width:500px"
+    >
 
-<script>
-async function test() {
-    try {
-        const res = await fetch("https://add-equipment.deere.com/toggles", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                orgId: "9136520"
-            })
-        });
+    <button onclick="testCors()">Test CORS</button>
 
-        const text = await res.text();
-        document.getElementById("out").textContent = text;
-    } catch(e) {
-        document.getElementById("out").textContent = e;
-    }
-}
-</script>
+    <pre id="result"></pre>
 
+    <script>
+        async function testCors() {
+            const token = document.getElementById("token").value;
+            const output = document.getElementById("result");
+
+            if (!token) {
+                output.textContent = "Enter a sandbox token first.";
+                return;
+            }
+
+            output.textContent = "Sending request...";
+
+            try {
+                const response = await fetch(
+                    "https://api.sandbox.loadsmart.com/api/v2/account",
+                    {
+                        method: "GET",
+                        headers: {
+                            "Authorization": "Bearer " + token,
+                            "Accept": "application/json"
+                        }
+                    }
+                );
+
+                const body = await response.text();
+
+                output.textContent =
+                    "HTTP: " + response.status + "\n\n" +
+                    "Response:\n" + body;
+            } catch (error) {
+                output.textContent =
+                    "CORS/Fetch error:\n" + error;
+            }
+        }
+    </script>
 </body>
 </html>
